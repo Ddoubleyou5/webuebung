@@ -7,9 +7,11 @@ import java.util.*;
 
 @Component
 public class GradeController {
-    @Autowired private GradingService gradingService;
+    @Autowired 
+    private GradingService gradingService;
 
     public double putGrades(List<Double>grades){
         return gradingService.calculateAvg(grades);
     }
 }
+
