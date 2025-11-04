@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Notenübersicht</title>
+</head>
+<body>
+    <h1>Noten</h1>
+
+    <ul>
+        <li th:each="grade : ${grades}" th:text="${grade}"></li>
+    </ul>
+
+</body>
+</html>
