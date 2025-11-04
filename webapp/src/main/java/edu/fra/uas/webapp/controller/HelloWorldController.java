@@ -12,7 +12,7 @@ public class HelloWorldController {
     @RequestMapping(value="hello", method=RequestMethod.GET)
     @ResponseBody
     public String getHelloWorld() {
-        return "<h1>I serve no purpose but use Spring Boot!</h1>";
+        return "<h1>Willkommen zur Notenberechnung</h1>";
     }
     
 }

@@ -10,29 +10,11 @@ import java.util.*;
 
 @Component
 public class GradeController {
-
-   private List<Double>grades = new ArrayList<Double>();
     @Autowired 
     private GradingService gradingService;
-
-    @PostConstruct
-    public void dataInit(){
-					grades.add(1.0);
-					grades.add(1.7);
-					grades.add(4.0);
-					grades.add(5.0);
-					grades.add(3.7);
-                    System.out.println("Initialisiert");
-    }
-
-    @PreDestroy
-    public void deleteData(){
-        grades.clear();
-        System.out.println("remove data");
-    }
-
-    public double putGrades(){
-        return gradingService.calculateAvg(grades);
+    
+    public double calculateAvg(){
+        return gradingService.calculateAvgerage();
     }
 }
 
