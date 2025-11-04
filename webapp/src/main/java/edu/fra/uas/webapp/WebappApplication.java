@@ -23,7 +23,7 @@ public class WebappApplication {
     @Bean
     CommandLineRunner init(){
         return args -> {
-            double result = gradeController.putGrades();
+            double result = gradeController.calculateAvg();
             System.out.printf("Durchschnittsnote ist: %.2f%n", result);
         };
     }
