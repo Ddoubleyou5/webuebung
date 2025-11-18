@@ -1,0 +1,10 @@
+type Query {
+    grades: [Float!]!
+    gradebyId(id: Int!): Float
+    averageGrade: Float
+}
+
+type Mutation {
+    addGrade(value: Float!): Float!
+    clearGrades: Boolean!
+}
