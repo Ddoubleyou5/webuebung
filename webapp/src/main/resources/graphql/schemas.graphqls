@@ -1,0 +1,14 @@
+#Queries
+
+type Query {
+    noten: [Float!]!
+    avg: Float!
+    gradeByIndex(index: Int!): Float!
+}
+
+#Mutations
+type Mutation {
+    addGrade(grade: Float!): Boolean!
+    deleteGrade(index: Int!): Boolean!
+    updateGrades(index: Int!, grade: Float!): [Float!]! 
+}
