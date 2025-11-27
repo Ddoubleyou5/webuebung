@@ -19,10 +19,11 @@ public class GradingService {
         return grades;
     }
 
-    public void addGrade(double grade){
+    public boolean addGrade(double grade){
         if (grade != 0.0){
             grades.add(grade);
-        }
+            return true;
+        }return false;
     }
 
     public void clearData(){

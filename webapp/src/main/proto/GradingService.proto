@@ -1,0 +1,23 @@
+syntax = "proto3";
+package edu.fra.uas.webapp.grpc;
+
+import "google/protobuf/wrappers.proto";
+
+message GradesRequest {}
+
+message GradesResponse {
+    repeated google.protobuf.DoubleValue grades = 1;
+}
+
+service GradesService {
+    // list all Grades
+    rpc listGrades(GradesRequest) returns (GradesResponse);
+    // finds a grade by index
+    rpc findGradeByIndex(google.protobuf.Int64Value) returns (google.protobuf.DoubleValue);
+    // add a grade
+    rpc addGrade(google.protobuf.DoubleValue) returns (google.protobuf.BoolValue);
+    // updates a grade
+    rpc updateGrade(google.protobuf.Int64Value) returns (google.protobuf.BoolValue);
+    // deletes a grade
+    rpc deleteGrade(google.protobuf.Int64Value) returns (google.protobuf.BoolValue);
+}
