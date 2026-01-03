@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import edu.fra.uas.webapp.service.GradingService;
 import org.springframework.http.MediaType;
+import javax.sql.DataSource;
 
 @RestController
 @RequestMapping("/restnoten")
@@ -27,6 +28,8 @@ public class restController {
 private final Logger log = org.slf4j.LoggerFactory.getLogger(RestController.class);
 @Autowired
 private GradingService gradingService;
+@Autowired
+private DataSource dataSource;
 
 @GetMapping(value="/noten", produces = MediaType.APPLICATION_JSON_VALUE)
 @ResponseBody
@@ -78,6 +81,68 @@ public ResponseEntity<?> getMethodName(@PathVariable("index") int index) {
     }
     Double grade = gradingService.getGrades().get(index);
     return new ResponseEntity<Double>(grade,HttpStatus.OK);
+}
+
+@GetMapping("/testdb")
+public ResponseEntity<?> testDb() {
+    try (var conn = dataSource.getConnection();
+         var stmt = conn.createStatement();
+         var rs = stmt.executeQuery("SELECT * FROM noten")) {
+
+        List<java.util.Map<String, Object>> rows = new ArrayList<>();
+        var meta = rs.getMetaData();
+        int columnCount = meta.getColumnCount();
+
+        while (rs.next()) {
+            java.util.Map<String, Object> row = new java.util.LinkedHashMap<>();
+            for (int i = 1; i <= columnCount; i++) {
+                String columnName = meta.getColumnLabel(i);
+                Object value = rs.getObject(i);
+                row.put(columnName, value);
+            }
+            rows.add(row);
+        }
+
+        return ResponseEntity.ok(rows);
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        return ResponseEntity.status(500).body("DB Fehler: " + e.getMessage());
+    }
+}
+
+
+@GetMapping("/noten/{gradeId}")
+public ResponseEntity<?> getNoteById(@PathVariable String gradeId) {
+    try (var conn = dataSource.getConnection();
+         var stmt = conn.prepareStatement("SELECT * FROM noten WHERE \"gradeId\" = ?")) {
+
+        stmt.setObject(1, java.util.UUID.fromString(gradeId));
+
+        try (var rs = stmt.executeQuery()) {
+
+            if (!rs.next()) {
+                return ResponseEntity.status(404).body("Keine Note mit dieser gradeId gefunden.");
+            }
+
+            // alle Spalten dynamisch in eine Map packen
+            var meta = rs.getMetaData();
+            int columnCount = meta.getColumnCount();
+            java.util.Map<String, Object> row = new java.util.LinkedHashMap<>();
+
+            for (int i = 1; i <= columnCount; i++) {
+                String columnName = meta.getColumnLabel(i);
+                Object value = rs.getObject(i);
+                row.put(columnName, value);
+            }
+
+            return ResponseEntity.ok(row);
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        return ResponseEntity.status(500).body("DB Fehler: " + e.getMessage());
+    }
 }
 
 
